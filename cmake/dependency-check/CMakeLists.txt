@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 project(ListenFreeDependencyCheck LANGUAGES C CXX)
-find_package(Qt6 6.10 REQUIRED COMPONENTS Core Gui Widgets Qml Quick QuickDialogs2 Sql Network Concurrent DBus ShaderTools)
+# Qmmp's build requires LinguistTools even though the app uses JSON translations.
+find_package(Qt6 6.10 REQUIRED COMPONENTS Core Gui Widgets Qml Quick QuickDialogs2 Sql Network Concurrent DBus ShaderTools LinguistTools)
 find_package(KF6WindowSystem REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(ZLIB REQUIRED)

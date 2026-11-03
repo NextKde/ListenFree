@@ -7,7 +7,7 @@ This repository builds from its own root. No NextKDE checkout, desktop shell, Go
 ## Linux dependencies
 
 - CMake **3.28+**, Ninja, a C++20 compiler, Python 3, Bash, curl, tar/bzip2, patch, SHA-256 tools and flock.
-- A consistent **Qt 6.10+ / KDE Frameworks 6 WindowSystem** toolchain: Qt Core, Gui, Widgets, Qml, Quick, QuickDialogs2, Sql (SQLite driver), Network, DBus, Concurrent and ShaderTools, plus the Qt Quick Controls/Dialogs/Effects/Shapes QML runtime modules.
+- A consistent **Qt 6.10+ / KDE Frameworks 6 WindowSystem** toolchain: Qt Core, Gui, Widgets, Qml, Quick, QuickDialogs2, Sql (SQLite driver), Network, DBus, Concurrent, ShaderTools and **LinguistTools** (required to build Qmmp), plus the Qt Quick Controls/Dialogs/Effects/Shapes QML runtime modules.
 - FFmpeg development libraries (avformat, avcodec, avutil, swresample), libcurl, PulseAudio client library, OpenSSL, zlib, ICU, libsecret and utf8cpp headers.
 - **QuickJS-ng 0.16.2**, **TagLib 2.3.1+**, and **Qmmp 2.4.1 with this repository's patches and matching plugins**. Unpatched system Qmmp is not compatible. `tools/prepare-listenfree-sdk.sh` downloads checksum-pinned releases and builds them privately; TagLib 2.3.1 is built by default. Set `LISTENFREE_USE_SYSTEM_TAGLIB=1` to deliberately use an installed version >= 2.3.1 instead.
 
@@ -24,7 +24,7 @@ Example system dependencies (install these yourself, not through the app install
 ```sh
 # Ubuntu 26.04
 sudo apt install build-essential cmake ninja-build pkg-config python3 curl tar bzip2 patch util-linux \
-  qt6-base-dev qt6-base-dev-tools qt6-declarative-dev qt6-declarative-dev-tools qt6-shadertools-dev \
+  qt6-base-dev qt6-base-dev-tools qt6-declarative-dev qt6-declarative-dev-tools qt6-shadertools-dev qt6-tools-dev qt6-tools-dev-tools \
   libkf6windowsystem-dev libavformat-dev libavcodec-dev libavutil-dev libswresample-dev \
   libcurl4-openssl-dev libpulse-dev libssl-dev zlib1g-dev libicu-dev libsecret-1-dev libutfcpp-dev \
   libqt6sql6-sqlite qml6-module-qtcore qml6-module-qtqml qml6-module-qtqml-models \
@@ -33,7 +33,7 @@ sudo apt install build-essential cmake ninja-build pkg-config python3 curl tar b
   qml6-module-qtquick-dialogs qml6-module-qtquick-effects qml6-module-qtquick-shapes
 # Arch Linux
 sudo pacman -S --needed base-devel cmake ninja pkgconf python curl tar bzip2 patch util-linux \
-  qt6-base qt6-declarative qt6-shadertools kwindowsystem ffmpeg libpulse openssl zlib icu libsecret utf8cpp
+  qt6-base qt6-declarative qt6-shadertools qt6-tools kwindowsystem ffmpeg libpulse openssl zlib icu libsecret utf8cpp
 ```
 
 ## CLI build and direct installation
