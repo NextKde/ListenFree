@@ -1,0 +1,22 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": { "major": 3, "minor": 28, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "linux-release",
+      "displayName": "ListenFree Linux Release",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/linux-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_INSTALL_PREFIX": "$env{HOME}/.local",
+        "BUILD_TESTING": "OFF",
+        "LISTENFREE_BUILD_TESTS": "OFF",
+        "LISTENFREE_BUILD_QMMP_BACKEND": "ON",
+        "LISTENFREE_BUILD_VIDEO": "OFF",
+        "LISTENFREE_BUILD_WEB_LOGIN": "OFF"
+      }
+    }
+  ],
+  "buildPresets": [{ "name": "linux-release", "configurePreset": "linux-release", "jobs": 4 }]
+}
