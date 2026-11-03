@@ -56,7 +56,8 @@ jobs=${CMAKE_BUILD_PARALLEL_LEVEL:-$(nproc)}
 (( jobs <= 8 )) || jobs=8
 cmake -S "$sdk/vendor/quickjs-0.16.2" -B "$sdk/build/quickjs" -G Ninja \
     -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$sdk/prefix" -DCMAKE_INSTALL_LIBDIR=lib \
-    -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF -DQJS_BUILD_EXAMPLES=OFFcmake --build "$sdk/build/quickjs" --parallel "$jobs"
+    -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DBUILD_SHARED_LIBS=OFF -DQJS_BUILD_EXAMPLES=OFF
+cmake --build "$sdk/build/quickjs" --parallel "$jobs"
 cmake --install "$sdk/build/quickjs"
 # Ubuntu can ship an older TagLib than the app's required API. Build the
 # pinned release privately instead of replacing distro libraries.
