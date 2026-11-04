@@ -8,6 +8,7 @@
 #include <QCoreApplication>
 #include <QCryptographicHash>
 #include <QWindow>
+#include <QGuiApplication>
 #include <QFutureWatcher>
 #include <QtConcurrent>
 #include <QSaveFile>
@@ -32,7 +33,7 @@ public:
     bool yes() const { return true; }
     bool no() const { return false; }
     QString identity() const { return "KOS ListenFree"; }
-    QString desktopEntry() const { return "listenfree"; }
+    QString desktopEntry() const { return QGuiApplication::desktopFileName(); }
     QStringList schemes() const { return {"file", "http", "https"}; }
     QStringList mimeTypes() const { return {"audio/mpeg", "audio/flac", "audio/ogg", "audio/wav", "audio/mp4"}; }
 public slots:
@@ -150,7 +151,11 @@ void LinuxMediaSession::updateRegistration() {
     if (registered_ && !enabled) {
         bus.unregisterObject(Path); bus.unregisterService(service_); registered_ = false; published_.clear();
     } else if (!registered_ && enabled) {
+#ifdef LISTENFREE_FLATPAK_BUILD
+        service_ = "org.mpris.MediaPlayer2.org.nextkde.ListenFree";
+#else
         service_ = "org.mpris.MediaPlayer2.listenfree";
+#endif
         if (!bus.registerService(service_)) {
             service_ += ".instance" + QString::number(QCoreApplication::applicationPid());
             if (!bus.registerService(service_)) return;

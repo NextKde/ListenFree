@@ -1,0 +1,356 @@
+{
+  "app-id": "org.nextkde.ListenFree",
+  "runtime": "org.kde.Platform",
+  "runtime-version": "6.11",
+  "sdk": "org.kde.Sdk",
+  "command": "listenfree",
+  "cleanup": [
+    "/src",
+    "/include",
+    "/lib/cmake",
+    "/lib/pkgconfig",
+    "/lib/libqjs.a",
+    "/share/ECM",
+    "/share/utf8cpp",
+    "/bin/qjs",
+    "/bin/qjsc",
+    "/bin/qmmp",
+    "/bin/secret-tool",
+    "/bin/taglib-config",
+    "/share/applications/qmmp.desktop",
+    "/share/metainfo/com.ylsoftware.qmmp.metainfo.xml",
+    "/share/solid/actions/qmmp-opencda.desktop"
+  ],
+  "finish-args": [
+    "--share=ipc",
+    "--share=network",
+    "--socket=wayland",
+    "--socket=fallback-x11",
+    "--socket=pulseaudio",
+    "--device=dri",
+    "--talk-name=org.freedesktop.secrets",
+    "--own-name=org.mpris.MediaPlayer2.org.nextkde.ListenFree",
+    "--own-name=org.mpris.MediaPlayer2.org.nextkde.ListenFree.*",
+    "--env=QT_QPA_PLATFORMTHEME=xdgdesktopportal"
+  ],
+  "modules": [
+    {
+      "name": "extra-cmake-modules",
+      "buildsystem": "cmake-ninja",
+      "config-opts": [
+        "-DBUILD_TESTING=OFF"
+      ],
+      "cleanup": [
+        "*"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://download.kde.org/stable/frameworks/6.31/extra-cmake-modules-6.31.0.tar.xz",
+          "sha256": "8f74af329e4c918358bfe54316f8cf4d530c28444595a3e2fb15075f72877f17"
+        }
+      ]
+    },
+    {
+      "name": "kwindowsystem",
+      "buildsystem": "cmake-ninja",
+      "config-opts": [
+        "-DBUILD_TESTING=OFF",
+        "-DCMAKE_INSTALL_LIBDIR=lib"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://download.kde.org/stable/frameworks/6.31/kwindowsystem-6.31.0.tar.xz",
+          "sha256": "9968f66ba750432480960e321dd7ec32e2ea19a1596496f39147797684842f57"
+        }
+      ]
+    },
+    {
+      "name": "libsecret",
+      "buildsystem": "meson",
+      "config-opts": [
+        "-Dmanpage=false",
+        "-Dvapi=false",
+        "-Dgtk_doc=false",
+        "-Dintrospection=false",
+        "-Dcrypto=gnutls",
+        "-Dbash_completion=disabled"
+      ],
+      "make-args": [
+        "libsecret/libsecret-1.so.0.0.0", "tool/secret-tool",
+        "libsecret/secret-enum-types.h"
+      ],
+      "no-make-install": true,
+      "post-install": [
+        "meson install --no-rebuild --tags runtime,devel",
+        "install -Dm644 /run/build/libsecret/COPYING /app/share/licenses/listenfree-dependencies/Libsecret.txt"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://download.gnome.org/sources/libsecret/0.21/libsecret-0.21.7.tar.xz",
+          "sha256": "6b452e4750590a2b5617adc40026f28d2f4903de15f1250e1d1c40bfd68ed55e"
+        }
+      ]
+    },
+    {
+      "name": "quickjs-ng",
+      "buildsystem": "cmake-ninja",
+      "config-opts": [
+        "-DCMAKE_INSTALL_LIBDIR=lib",
+        "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
+        "-DBUILD_SHARED_LIBS=OFF",
+        "-DQJS_BUILD_EXAMPLES=OFF"
+      ],
+      "make-args": ["qjs", "qjs_exe", "qjsc"],
+      "no-make-install": true,
+      "post-install": [
+        "cmake --install .",
+        "install -Dm644 /run/build/quickjs-ng/LICENSE /app/share/licenses/listenfree-dependencies/QuickJS.txt"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://codeload.github.com/quickjs-ng/quickjs/tar.gz/refs/tags/v0.16.2",
+          "archive-type": "tar-gzip",
+          "sha256": "97c80625b26775a4c7ca618c004d4ea24cf99cbf867e4eba78bd927a8b23d106"
+        }
+      ]
+    },
+    {
+      "name": "taglib",
+      "buildsystem": "cmake-ninja",
+      "config-opts": [
+        "-DCMAKE_INSTALL_LIBDIR=lib",
+        "-DBUILD_SHARED_LIBS=ON",
+        "-DBUILD_TESTING=OFF",
+        "-DBUILD_BINDINGS=OFF",
+        "-DBUILD_EXAMPLES=OFF",
+        "-DUTF8CPP_ENABLE_TESTS=OFF",
+        "-DUTF8CPP_ENABLE_BENCHMARKS=OFF"
+      ],
+      "post-install": [
+        "install -Dm644 /run/build/taglib/COPYING.LGPL /app/share/licenses/listenfree-dependencies/TagLib-LGPL.txt",
+        "install -Dm644 /run/build/taglib/COPYING.MPL /app/share/licenses/listenfree-dependencies/TagLib-MPL.txt",
+        "install -Dm644 /run/build/taglib/3rdparty/utfcpp/LICENSE /app/share/licenses/listenfree-dependencies/UTF8CPP.txt"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://codeload.github.com/taglib/taglib/tar.gz/refs/tags/v2.3.1",
+          "archive-type": "tar-gzip",
+          "sha256": "72c3176432b065978dee670b674aaeae7d9a9f37c721ee578181e9231832bca1"
+        },
+        {
+          "type": "archive",
+          "url": "https://codeload.github.com/nemtrif/utfcpp/tar.gz/819011bb01628fe1aa2f1da9f2c842a48fd5680b",
+          "archive-type": "tar-gzip",
+          "sha256": "4da14d9108757c7c7e8bb7e94706dbb6e1b5b976abc868b75d18a7d28b719729",
+          "dest": "3rdparty/utfcpp"
+        }
+      ]
+    },
+    {
+      "name": "patched-qmmp",
+      "buildsystem": "cmake-ninja",
+      "config-opts": [
+        "-DCMAKE_INSTALL_LIBDIR=lib",
+        "-DCMAKE_INSTALL_RPATH=/app/lib",
+        "-DUSE_AAC=OFF",
+        "-DUSE_ALSA=OFF",
+        "-DUSE_ANALYZER=OFF",
+        "-DUSE_ARCHIVE=OFF",
+        "-DUSE_BS2B=OFF",
+        "-DUSE_CDA=OFF",
+        "-DUSE_CONVERTER=OFF",
+        "-DUSE_COPYPASTE=OFF",
+        "-DUSE_COVER=OFF",
+        "-DUSE_CROSSFADE=ON",
+        "-DUSE_CUE=OFF",
+        "-DUSE_CURL=ON",
+        "-DUSE_DIR_ASSOC=OFF",
+        "-DUSE_DSOUND=OFF",
+        "-DUSE_ENCA=OFF",
+        "-DUSE_FFMPEG=ON",
+        "-DUSE_FILEOPS=OFF",
+        "-DUSE_FILEWRITER=OFF",
+        "-DUSE_FLAC=OFF",
+        "-DUSE_GME=OFF",
+        "-DUSE_GNOMEHOTKEY=OFF",
+        "-DUSE_HISTORY=OFF",
+        "-DUSE_HOTKEY=OFF",
+        "-DUSE_JACK=OFF",
+        "-DUSE_KDENOTIFY=OFF",
+        "-DUSE_LADSPA=OFF",
+        "-DUSE_LIBCDDB=OFF",
+        "-DUSE_LIBRARY=OFF",
+        "-DUSE_LIBRCD=OFF",
+        "-DUSE_LISTENBRAINZ=OFF",
+        "-DUSE_LYRICS=OFF",
+        "-DUSE_MAD=OFF",
+        "-DUSE_MIDI=OFF",
+        "-DUSE_MONOTOSTEREO=OFF",
+        "-DUSE_MPC=OFF",
+        "-DUSE_MPG123=OFF",
+        "-DUSE_MPRIS=OFF",
+        "-DUSE_NOTIFIER=OFF",
+        "-DUSE_NULL=ON",
+        "-DUSE_OPUS=OFF",
+        "-DUSE_OSS=OFF",
+        "-DUSE_OSS4=OFF",
+        "-DUSE_PIPEWIRE=OFF",
+        "-DUSE_PROJECTM=OFF",
+        "-DUSE_PULSE=ON",
+        "-DUSE_QMMP_DIALOG=OFF",
+        "-DUSE_QSUI=OFF",
+        "-DUSE_QTMULTIMEDIA=OFF",
+        "-DUSE_RDETECT=OFF",
+        "-DUSE_RGSCAN=OFF",
+        "-DUSE_SB=OFF",
+        "-DUSE_SCROBBLER=OFF",
+        "-DUSE_SHOUT=OFF",
+        "-DUSE_SID=OFF",
+        "-DUSE_SKINNED=OFF",
+        "-DUSE_SLEEPINHIBITOR=OFF",
+        "-DUSE_SNDFILE=OFF",
+        "-DUSE_SOXR=OFF",
+        "-DUSE_STATICON=OFF",
+        "-DUSE_STEREO=OFF",
+        "-DUSE_TAGEDITOR=OFF",
+        "-DUSE_TASKBAR=OFF",
+        "-DUSE_TRACKCHANGE=OFF",
+        "-DUSE_TWO_PANEL_DIALOG=OFF",
+        "-DUSE_UDISKS=OFF",
+        "-DUSE_VORBIS=OFF",
+        "-DUSE_WASAPI=OFF",
+        "-DUSE_WAVEOUT=OFF",
+        "-DUSE_WAVPACK=OFF",
+        "-DUSE_XMP=OFF"
+      ],
+      "post-install": [
+        "install -Dm644 /run/build/patched-qmmp/COPYING /app/share/licenses/listenfree-dependencies/Qmmp.txt",
+        "mkdir -p /app/src/qmmp-2.4.1/src",
+        "cp -a /app/include/qmmp /app/include/qmmpui /app/src/qmmp-2.4.1/src/",
+        "install -m644 /run/build/patched-qmmp/COPYING /app/src/qmmp-2.4.1/COPYING"
+      ],
+      "sources": [
+        {
+          "type": "archive",
+          "url": "https://downloads.sourceforge.net/project/qmmp-dev/qmmp/2.4/qmmp-2.4.1.tar.bz2",
+          "sha256": "5a0a6f1efcefe9cc4b1ff3ae4038493168baec0b12989ca116af2454098825ed"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/2.4.1/0001-enable-https-verification.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/2.4.1/0003-propagate-http-end-of-stream.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0004-upstream-shuffle-startup.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0005-adaptive-equal-power-crossfade.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0006-shuffle-history-cycle.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0007-manual-prepared-transition.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0008-http-range-seek.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0009-smart-transition-queue-cancel.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0010-nonblocking-network-seek.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0011-retain-http-seek-ranges.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0012-local-content-format-probe.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0013-adaptive-smart-mix.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0014-smart-mix-feedback.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0015-source-timed-natural-mix.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0016-six-second-mix-window.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0017-output-primary-commit.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0018-calibrated-octave-equalizer.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0019-http-complete-short-clip.patch"
+        },
+        {
+          "type": "patch",
+          "path": "../../patches/qmmp/0020-bounded-http-read-ahead.patch"
+        }
+      ]
+    },
+    {
+      "name": "listenfree",
+      "buildsystem": "cmake-ninja",
+      "config-opts": [
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DBUILD_TESTING=OFF",
+        "-DLISTENFREE_BUILD_TESTS=OFF",
+        "-DLISTENFREE_FLATPAK_BUILD=ON",
+        "-DLISTENFREE_BUILD_WEB_LOGIN=OFF",
+        "-DLISTENFREE_BUILD_VIDEO=OFF",
+        "-DLISTENFREE_BUILD_MPV_BACKEND=OFF",
+        "-DLISTENFREE_QMMP_SOURCE_ROOT=/app/src/qmmp-2.4.1",
+        "-DLISTENFREE_QMMP_INCLUDE_ROOT=/app/include",
+        "-DLISTENFREE_QMMP_LIBRARY=/app/lib/libqmmp.so",
+        "-DLISTENFREE_QMMP_RUNTIME=/app/lib/libqmmp.so",
+        "-DLISTENFREE_QMMP_UI_LIBRARY=/app/lib/libqmmpui.so",
+        "-DLISTENFREE_QMMP_PLUGIN_ROOT=/app/lib/qmmp-2.4"
+      ],
+      "sources": [
+        {
+          "type": "dir",
+          "path": "../..",
+          "skip": [
+            ".git",
+            "tmp",
+            "build",
+            ".build",
+            "_vendor",
+            ".vcpkg_installed",
+            ".flatpak-builder"
+          ]
+        }
+      ]
+    }
+  ]
+}

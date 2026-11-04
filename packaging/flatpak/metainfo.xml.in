@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>@KOS_FLATPAK_APP_ID@</id>
+  <name>KOS ListenFree</name>
+  <summary>Play local and online music</summary>
+  <summary xml:lang="zh_CN">播放本地和在线音乐</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-only</project_license>
+  <developer id="org.nextkde"><name>NextKde Contributors</name></developer>
+  <description>
+    <p>Manage a music library and play audio using a private patched Qmmp engine.</p>
+    <p>This package excludes optional embedded web login and video. Cookie login requires the desktop secret service. Files must be selected through the desktop file chooser. Native profiles and credentials are not automatically imported.</p>
+  </description>
+  <launchable type="desktop-id">@KOS_FLATPAK_APP_ID@.desktop</launchable>
+  <provides><binary>listenfree</binary></provides>
+  <categories><category>AudioVideo</category><category>Audio</category><category>Player</category></categories>
+  <url type="homepage">https://github.com/NextKde/ListenFree</url>
+  <url type="bugtracker">https://github.com/NextKde/ListenFree/issues</url>
+  <content_rating type="oars-1.1"/>
+  <releases><release version="@PROJECT_VERSION@" date="@KOS_FLATPAK_RELEASE_DATE@"/></releases>
+</component>

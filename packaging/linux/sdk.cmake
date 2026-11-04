@@ -1,5 +1,11 @@
 # An optional prepared SDK keeps patched Qmmp and TagLib out of system paths.
 # The application can also be configured with the individual LISTENFREE_* paths.
+if(LISTENFREE_FLATPAK_BUILD)
+    if(LISTENFREE_SDK OR DEFINED ENV{LISTENFREE_SDK} OR KOS_LISTENFREE_SDK OR DEFINED ENV{KOS_LISTENFREE_SDK})
+        message(FATAL_ERROR "Sandbox builds require declared dependency paths, not an inherited host SDK")
+    endif()
+    return()
+endif()
 set(LISTENFREE_SDK "$ENV{LISTENFREE_SDK}" CACHE PATH "Private SDK containing prefix, deps/usr and vendor")
 # Retain the explicit legacy dependency variable, not any NextKDE source paths.
 if(NOT LISTENFREE_SDK AND (KOS_LISTENFREE_SDK OR DEFINED ENV{KOS_LISTENFREE_SDK}))

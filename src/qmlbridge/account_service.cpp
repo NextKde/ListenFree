@@ -144,7 +144,11 @@ QByteArray readCredential(const QString& target) {
 }
 #else
 const SecretSchema* credentialSchema() {
+#ifdef LISTENFREE_FLATPAK_BUILD
+    static const SecretSchema schema = {"org.nextkde.ListenFree.Credentials", SECRET_SCHEMA_NONE,
+#else
     static const SecretSchema schema = {"org.listenfree.Credentials", SECRET_SCHEMA_NONE,
+#endif
                                        {{"target", SECRET_SCHEMA_ATTRIBUTE_STRING}, {nullptr, SECRET_SCHEMA_ATTRIBUTE_STRING}}};
     return &schema;
 }
@@ -213,7 +217,11 @@ bool AccountService::hasLoginCookie(const QString& provider, const QByteArray& c
 }
 QString AccountService::target(const QString& provider) const {
     // Multiple portable profiles must not share login state unintentionally.
+#ifdef LISTENFREE_FLATPAK_BUILD
+    return "org.nextkde.ListenFree/"+QString::fromLatin1(QCryptographicHash::hash(profile_.toUtf8(),QCryptographicHash::Sha256).toHex().left(24))+"/"+provider;
+#else
     return "ListenFree/"+QString::fromLatin1(QCryptographicHash::hash(profile_.toUtf8(),QCryptographicHash::Sha256).toHex().left(24))+"/"+provider;
+#endif
 }
 QVariantMap AccountService::parseProfile(const QString& provider,const QByteArray& bytes) {
     const auto root=QJsonDocument::fromJson(bytes).object();

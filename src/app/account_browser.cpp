@@ -48,6 +48,10 @@ void AccountBrowser::open(const QString& provider) {
         emit notice(tr("请先完成或关闭已有的网页登录窗口。"));
         return;
     }
+#ifdef LISTENFREE_FLATPAK_BUILD
+    emit notice(tr("此沙箱版本不包含网页登录组件。请使用 Cookie 登录；不会启动宿主组件。"));
+    return;
+#endif
     const auto directory = QCoreApplication::applicationDirPath();
     auto helper = directory + "/listenfree-web-login";
     if (!QFileInfo(helper).isExecutable()) helper = QStandardPaths::findExecutable("listenfree-web-login");

@@ -74,7 +74,14 @@ int main(int argc, char* argv[]) {
     // Keep the existing storage/application IDs so upgrades retain the library.
     app.setApplicationDisplayName("KOS ListenFree");
     app.setApplicationVersion("0.3.8-nextkde.5");
+#ifdef LISTENFREE_FLATPAK_BUILD
+    app.setDesktopFileName("org.nextkde.ListenFree");
+    app.setApplicationVersion(LISTENFREE_RELEASE_VERSION);
+    // Never load host-provided plugins into a sandbox build.
+    qputenv("QMMP_PLUGINS", "/app/opt/listenfree/qmmp");
+#else
     app.setDesktopFileName("listenfree");
+#endif
 #ifdef Q_OS_WIN
     CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
     listenfree::WindowsMediaSession::registerApplicationIdentity("ListenFree.Desktop", "ListenFree");
@@ -102,7 +109,14 @@ int main(int argc, char* argv[]) {
     listenfree::infrastructure::database::Database database;
     QString dataDirectory = portableMode ? QDir(app.applicationDirPath()).filePath("data") : QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation);
     const auto dataIndex = arguments.indexOf("--data-dir");
+#ifdef LISTENFREE_FLATPAK_BUILD
+    if (portableMode || dataIndex >= 0) {
+        qCritical() << "Sandbox builds use private application storage; portable and --data-dir are unsupported.";
+        return 2;
+    }
+#else
     if (dataIndex >= 0 && dataIndex + 1 < arguments.size()) dataDirectory = QFileInfo(arguments[dataIndex+1]).absoluteFilePath();
+#endif
     if (!QDir().mkpath(dataDirectory)) return 2;
     listenfree::SingleInstance instance(dataDirectory);
     const auto instanceResult = instance.acquire(listenfree::mediaFilesFromArguments(arguments.mid(1)));

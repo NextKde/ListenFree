@@ -4,6 +4,10 @@ Independent Linux music player maintained at [NextKde/ListenFree](https://github
 
 This repository builds from its own root. No NextKDE checkout, desktop shell, Go service or sibling source directory is required. Original component notices, patches, resources and relevant development sources are retained; see [SOURCE_PROVENANCE.md](SOURCE_PROVENANCE.md) and [licenses/THIRD-PARTY-NOTICES.txt](licenses/THIRD-PARTY-NOTICES.txt).
 
+## Flatpak bundle preparation
+
+See [packaging/flatpak/README.md](packaging/flatpak/README.md) for the development manifest, declared patched dependencies, sandbox identity/permissions, mandatory license inputs and artifact-only signing workflow. No signed binary Release or sandbox acceptance is claimed. Native profiles/credentials are not migrated; optional WebEngine login and video are excluded from this initial package. Applicable component/source-delivery review remains required before publication.
+
 ## Linux dependencies
 
 - CMake **3.28+**, Ninja, a C++20 compiler, Python 3, Bash, curl, tar/bzip2, patch, SHA-256 tools and flock.
