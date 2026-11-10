@@ -14,3 +14,16 @@ The established CMake install layout is preserved:
 No NextKDE checkout, shell service, Go service, `kosctl` or migration tool is invoked. Existing ListenFree Qt identity, profile and MPRIS behavior remain unchanged. Installing does not remove `kos-music`, migrate its data, or change the user's default audio associations.
 
 Video and the separate WebEngine login helper remain optional and disabled by default. Build the latter from `packaging/web-login` or enable `LISTENFREE_BUILD_WEB_LOGIN`; install only with component `listenfree-web-login`. The ordinary player install does not pull in the helper. See [helper instructions](../web-login/install.txt).
+
+## KWin window controls
+
+The main and now-playing headers share one optional `Kos.SurfaceShape` protocol
+slot per window. KWin draws maximize/restore, minimize and close after takeover;
+only button children disappear, leaving the geometry target opaque. Unsupported
+desktops retain the client fallback. Fullscreen remains available through F11
+and the player action, independently of maximize/restore.
+
+A native installation needs the matching NextKde module on its QML import path.
+A future Flatpak must bundle the canonical module against its own Qt SDK; the
+host plugin is not accessible through the sandbox. Current published releases
+are source releases, not Flatpak artifacts.

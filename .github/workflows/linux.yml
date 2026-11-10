@@ -21,7 +21,11 @@ jobs:
             libqt6sql6-sqlite qml6-module-qtcore qml6-module-qtqml qml6-module-qtqml-models \
             qml6-module-qtqml-workerscript qml6-module-qtquick qml6-module-qtquick-window \
             qml6-module-qtquick-layouts qml6-module-qtquick-controls qml6-module-qtquick-templates \
-            qml6-module-qtquick-dialogs qml6-module-qtquick-effects qml6-module-qtquick-shapes
+            qml6-module-qtquick-dialogs qml6-module-qtquick-effects qml6-module-qtquick-shapes qml6-module-qttest
+      - name: Cooperative controls preserve one slot across headers
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: /usr/lib/qt6/bin/qmltestrunner -input tests/window-controls
       - name: Installer network and lifecycle regressions
         run: python3 -m unittest discover -s packaging/tests -p test_installer.py -v
       - name: Check the actual Qt and native dependencies

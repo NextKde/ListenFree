@@ -1178,5 +1178,6 @@
   "扫码登录需要可选组件 listenfree-web-login。安装后即可使用，无需重装播放器。也可以直接使用 Cookie 登录。": "QR sign-in requires the optional listenfree-web-login component. Install it to continue without reinstalling the player, or sign in with cookies.",
   "查看安装说明": "View installation instructions",
   "选择歌词来源": "Choose a lyrics source",
-  "歌词换源": "Change lyrics source"
+  "歌词换源": "Change lyrics source",
+  "最大化 / 还原": "Maximize / Restore"
 }

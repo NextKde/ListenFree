@@ -28,6 +28,8 @@ Item {
         const revision = settingsStore.revision
         return settingsStore.value(key, fallback)
     }
+    property alias windowControlGroup: nowPlayingTrafficCluster
+    property bool compositorControlsActive: false
     property var hostWindow
     property bool immersiveActive: false
     onImmersiveActiveChanged: {
@@ -567,16 +569,23 @@ Item {
         HeaderGlyph { objectName: "nowPlayingThemeButton"; kind: page.darkMode ? "moon" : "sun"; onClicked: page.themeToggleRequested() }
         Row {
             id: nowPlayingTrafficCluster
+            property int layoutRevision: 0
+            onPositioningComplete: layoutRevision++
             spacing: 10
             WindowTrafficButton {
+                externalDrawing: page.compositorControlsActive
                 objectName: "nowPlayingFullscreenButton"
-                action: "fullscreen"
+                action: "maximize"
                 fillColor: "#2fc866"
                 revealGlyph: nowPlayingTrafficHover.hovered || Qt.application.arguments.indexOf("nowplaying-traffic-hover") >= 0
                 reducedMotion: page.reducedMotion
-                onClicked: page.toggleFullScreen()
+                onClicked: if (page.hostWindow) {
+                    if (page.hostWindow.visibility === Window.Maximized) page.hostWindow.showNormal()
+                    else page.hostWindow.showMaximized()
+                }
             }
             WindowTrafficButton {
+                externalDrawing: page.compositorControlsActive
                 objectName: "nowPlayingMinimizeButton"
                 action: "minimize"
                 fillColor: "#ffbf18"
@@ -585,6 +594,7 @@ Item {
                 onClicked: if (page.hostWindow) page.hostWindow.showMinimized()
             }
             WindowTrafficButton {
+                externalDrawing: page.compositorControlsActive
                 id: closeWindowControl
                 action: "close"
                 fillColor: "#ff5f57"

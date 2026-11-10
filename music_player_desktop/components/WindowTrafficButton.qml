@@ -9,10 +9,15 @@ Item {
     property color fillColor: "#ff5f57"
     property bool revealGlyph: false
     property bool reducedMotion: false
+    property bool externalDrawing: false
+    opacity: externalDrawing ? 0 : 1
+    enabled: !externalDrawing
+    Accessible.ignored: externalDrawing
     signal clicked
     activeFocusOnTab: true
     Accessible.role: Accessible.Button
-    Accessible.name: action === "fullscreen" ? qsTr("全屏 / 退出全屏")
+    Accessible.name: action === "maximize" ? qsTr("最大化 / 还原")
+        : action === "fullscreen" ? qsTr("全屏 / 退出全屏")
         : action === "minimize" ? qsTr("最小化") : qsTr("关闭")
     Keys.onSpacePressed: clicked()
     Keys.onReturnPressed: clicked()
