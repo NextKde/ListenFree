@@ -19,6 +19,13 @@ Item {
         }
     }
 
+    CooperativeWindowControls {
+        id: compositorControls
+        objectName: "windowControls"
+        controlGroup: nowPlayingLoader.item && shell.nowPlayingOpen
+            ? nowPlayingLoader.item.windowControlGroup : topTrafficCluster
+    }
+
     property var catalog: null
     property var libraryCatalog: typeof backendLibraryCatalog !== "undefined" ? backendLibraryCatalog : catalog
     property var facade: null
@@ -1111,20 +1118,27 @@ Item {
                 TopGlyph { objectName: "topSettingsButton"; selected: shell.settingsOpen; kind: "gear"; onClicked: shell.settingsOpen = !shell.settingsOpen }
                 Row {
                     id: topTrafficCluster
+                    property int layoutRevision: 0
+                    onPositioningComplete: layoutRevision++
                     objectName: "topTrafficCluster"
                     anchors.verticalCenter: parent.verticalCenter
                     spacing: 10
                     WindowTrafficButton {
+                        externalDrawing: compositorControls.compositorActive
                         objectName: "windowFullscreenButton"
-                        action: "fullscreen"
+                        action: "maximize"
                         fillColor: "#2fc866"
                         revealGlyph: topTrafficHover.hovered
                                      || shell.captureView === "traffic-hover"
                                      || Qt.application.arguments.indexOf("traffic-hover") >= 0
                         reducedMotion: !shell.animationsEnabled
-                        onClicked: if (shell.hostWindow) shell.hostWindow.toggleFullScreen()
+                        onClicked: if (shell.hostWindow) {
+                            if (shell.hostWindow.visibility === Window.Maximized) shell.hostWindow.showNormal()
+                            else shell.hostWindow.showMaximized()
+                        }
                     }
                     WindowTrafficButton {
+                        externalDrawing: compositorControls.compositorActive
                         objectName: "windowMinimizeButton"
                         action: "minimize"
                         fillColor: "#ffbf18"
@@ -1135,6 +1149,7 @@ Item {
                         onClicked: if (shell.hostWindow) shell.hostWindow.showMinimized()
                     }
                     WindowTrafficButton {
+                        externalDrawing: compositorControls.compositorActive
                         id: closeWindowControl
                         objectName: "windowCloseButton"
                         action: "close"
@@ -2107,6 +2122,7 @@ Item {
     Component {
         id: nowPlayingComponent
         NowPlayingPage {
+            compositorControlsActive: compositorControls.compositorActive
             playerController: shell.playerController
             track: shell.displayedTrack
             immersiveService: typeof backendImmersive !== "undefined" ? backendImmersive : null

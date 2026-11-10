@@ -390,6 +390,14 @@ int main(int argc, char* argv[]) {
                 app.exit(3);
                 return;
             }
+            if (qEnvironmentVariableIntValue("LISTENFREE_REVIEW_REQUIRE_COMPOSITOR_CONTROLS") == 1) {
+                const auto *controls = window->findChild<QObject *>(QStringLiteral("windowControls"));
+                if (!controls || !controls->property("platformReady").toBool()
+                    || !controls->property("compositorActive").toBool()) {
+                    app.exit(5);
+                    return;
+                }
+            }
             const QFileInfo target(capturePath);
             QDir().mkpath(target.absolutePath());
             const QImage image = window->grabWindow();

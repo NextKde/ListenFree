@@ -476,6 +476,7 @@ qt_add_qml_module(listenfree
         music_player_desktop/AppShell.qml
         music_player_desktop/components/WindowChrome.qml
         music_player_desktop/components/WindowTrafficButton.qml
+        music_player_desktop/components/CooperativeWindowControls.qml
         music_player_desktop/components/WindowResizeHandles.qml
         music_player_desktop/components/AppTheme.qml
         music_player_desktop/components/GlassSurface.qml
@@ -747,3 +748,7 @@ endif()
 if(LISTENFREE_BUILD_TOOLS)
     add_custom_target(listenfree_tools ALL DEPENDS listenfree-library-scan-probe listenfree-scan-bench listenfree-artist-visual-probe)
 endif()
+
+# Optional platform import stays outside qmlcachegen on unsupported desktops.
+qt_add_resources(listenfree "window-control-platform" PREFIX "/listenfree/platform"
+    BASE music_player_desktop/components FILES music_player_desktop/components/NativeWindowControls.qml)
