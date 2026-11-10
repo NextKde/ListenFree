@@ -5,6 +5,7 @@ import "../../music_player_desktop/components"
 TestCase {
     name: "SingleSurfaceControls"
     when: windowShown
+    visible: true
     width: 400; height: 200
     Component { id: mock; Item {
         property Item target
