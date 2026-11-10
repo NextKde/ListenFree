@@ -43,6 +43,13 @@ jobs:
         run: cmake --build build/release --parallel 4
       - name: Install
         run: cmake --install build/release
+      - name: Retain installed candidate for isolated VM acceptance
+        run: tar -C "${{ runner.temp }}/listenfree-install" -czf build/listenfree-native-candidate.tar.gz .
+      - uses: actions/upload-artifact@v4
+        with:
+          name: listenfree-native-candidate
+          path: build/listenfree-native-candidate.tar.gz
+          retention-days: 7
   release:
     if: startsWith(github.ref, 'refs/tags/v')
     needs: build
